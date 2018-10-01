@@ -19,6 +19,8 @@ namespace LogGitHubEvents
             StreamReader readStream = new StreamReader(await req.Content.ReadAsStreamAsync());
             string body = readStream.ReadToEnd();
 
+            log.Info($"Requestsize: {body.Length}");
+
             return req.CreateResponse(HttpStatusCode.OK, body);
         }
     }
