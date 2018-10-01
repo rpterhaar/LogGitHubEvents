@@ -20,7 +20,7 @@ namespace LogGitHubEvents
                 .FirstOrDefault(q => string.Compare(q.Key, "name", true) == 0)
                 .Value;
 
-            if (name == null)
+            if (name == null) 
             {
                 // Get request body
                 dynamic data = await req.Content.ReadAsAsync<object>();
