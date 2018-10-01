@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,22 +16,10 @@ namespace LogGitHubEvents
         {
             log.Info("C# HTTP trigger function processed a request.");
 
-            log.Info(req.Content.ToString());
-            // parse query parameter
-            string name = req.GetQueryNameValuePairs()
-                .FirstOrDefault(q => string.Compare(q.Key, "name", true) == 0)
-                .Value;
-              
-            if (name == null) 
-            {
-                // Get request body
-                dynamic data = await req.Content.ReadAsAsync<object>();
-                name = data?.name;
-            }
+            StreamReader readStream = new StreamReader(await req.Content.ReadAsStreamAsync());
+            string body = readStream.ReadToEnd();
 
-            return name == null
-                ? req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a name on the query string or in the request body")
-                : req.CreateResponse(HttpStatusCode.OK, "Hello " + name);
+            return req.CreateResponse(HttpStatusCode.OK, body);
         }
     }
 }
